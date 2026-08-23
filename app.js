@@ -253,81 +253,99 @@
     $$('[data-case]').forEach(item => item.classList.toggle('is-active', item === button));
   }));
 
-  const auditChecks = $$('#auditForm input[type="checkbox"]');
-  const auditScore = $('#auditScore');
-  const auditLevel = $('#auditLevel');
-  const auditAdvice = $('#auditAdvice');
-  const scoreRing = $('#scoreRing');
-  const auditPriorityList = $('#auditPriorityList');
-  const auditTasks = {
-    audience: ['对象明确', '在第一屏补上一句话：这是为谁提供什么帮助。'],
-    message: ['核心表达', '删减第一屏的并列重点，只保留一个核心承诺。'],
-    hierarchy: ['层级明确', '把标题、说明和主要按钮拉开明显的大小与位置差异。'],
-    contrast: ['对比清晰', '提高正文和按钮对比度，并检查浅色文字是否真正可读。'],
-    spacing: ['留白有效', '合并重复信息，为标题、正文和操作留出稳定间距。'],
-    response: ['操作有回应', '为点击、加载、完成和失败补上即时状态反馈。'],
-    control: ['用户可控制', '为不可逆操作增加取消、返回或撤销入口。'],
-    mobile: ['移动端清楚', '用手机完成一次真实任务，修正溢出、遮挡和过小按钮。']
+  const livePreview = $('#livePreview');
+  const liveTitleSize = $('#liveTitleSize');
+  const liveSpacing = $('#liveSpacing');
+  const liveContrast = $('#liveContrast');
+  const liveRadius = $('#liveRadius');
+  const livePresetName = $('#livePresetName');
+  const liveAdvice = $('#liveAdvice');
+  const livePreviewStatus = $('#livePreviewStatus');
+  const liveInputs = [liveTitleSize, liveSpacing, liveContrast, liveRadius];
+  const livePresets = {
+    compact: { title: 44, spacing: 20, contrast: 42, radius: 0, theme: 'paper', name: '原始拥挤' },
+    balanced: { title: 68, spacing: 52, contrast: 78, radius: 18, theme: 'moss', name: '平衡清晰' },
+    poster: { title: 86, spacing: 68, contrast: 94, radius: 34, theme: 'night', name: '海报强调' }
   };
+  let liveTheme = 'moss';
 
-  function updateAudit(save = true) {
-    const checked = auditChecks.filter(input => input.checked);
-    const score = Math.round((checked.length / auditChecks.length) * 100);
-    auditScore.textContent = score;
-    scoreRing.style.setProperty('--score', `${score * 3.6}deg`);
-
-    const missing = auditChecks.filter(input => !input.checked);
-    auditPriorityList.replaceChildren();
-    const priorityItems = missing.slice(0, 3);
-    if (priorityItems.length === 0) {
-      const item = document.createElement('li');
-      item.innerHTML = '<b>✓</b><div><strong>基础项全部通过</strong><span>下一步邀请一位首次访问者完成真实任务，验证你的判断。</span></div>';
-      auditPriorityList.append(item);
-    } else {
-      priorityItems.forEach((input, index) => {
-        const [title, task] = auditTasks[input.value];
-        const item = document.createElement('li');
-        item.innerHTML = `<b>${String(index + 1).padStart(2, '0')}</b><div><strong>${title}</strong><span>${task}</span></div>`;
-        auditPriorityList.append(item);
-      });
-    }
-
-    if (score === 0) {
-      auditLevel.textContent = '先从第一项开始';
-      auditAdvice.textContent = '当前没有通过项。先完成右侧第一条任务，再回来重新检查。';
-    } else if (score < 50) {
-      auditLevel.textContent = '重点需要重建';
-      auditAdvice.textContent = '先处理服务对象、核心表达和第一屏层级，不要急着增加动画。';
-    } else if (score < 75) {
-      auditLevel.textContent = '基础已经成立';
-      auditAdvice.textContent = '优先修复尚未勾选的反馈与控制问题，让首次使用更安心。';
-    } else if (score < 100) {
-      auditLevel.textContent = '表达清晰';
-      auditAdvice.textContent = '网站已经容易理解，再邀请第一次使用的人完成真实测试。';
-    } else {
-      auditLevel.textContent = '可以交付';
-      auditAdvice.textContent = '所有基础标准都已覆盖。发布前再检查一次真实内容和移动端。';
-    }
-
-    if (save) {
-      const values = checked.map(input => input.value);
-      localStorage.setItem('first-look-audit', JSON.stringify(values));
-    }
+  function setLiveTheme(theme) {
+    liveTheme = theme;
+    livePreview.dataset.theme = theme;
+    $$('[data-live-theme]').forEach(button => button.classList.toggle('is-active', button.dataset.liveTheme === theme));
   }
+
+  function updateLiveStyle(save = true) {
+    const title = Number(liveTitleSize.value);
+    const spacing = Number(liveSpacing.value);
+    const contrast = Number(liveContrast.value);
+    const radius = Number(liveRadius.value);
+    livePreview.style.setProperty('--live-title', `${title}px`);
+    livePreview.style.setProperty('--live-space', `${spacing}px`);
+    livePreview.style.setProperty('--live-muted', `color-mix(in srgb,var(--live-ink) ${contrast}%,transparent)`);
+    livePreview.style.setProperty('--live-radius', `${radius}px`);
+
+    const values = { liveTitleValue: `${title} PX`, liveSpacingValue: `${spacing} PX`, liveContrastValue: `${contrast}%`, liveRadiusValue: `${radius} PX`, readoutTitle: `${title} PX`, readoutSpacing: `${spacing} PX`, readoutContrast: `${contrast}%`, readoutRadius: `${radius} PX` };
+    Object.entries(values).forEach(([id, value]) => { $(`#${id}`).textContent = value; });
+
+    if (contrast < 52) liveAdvice.textContent = '说明文字正在变得难读。好看的浅色文字，也可能让信息无法抵达。';
+    else if (spacing < 30) liveAdvice.textContent = '内容开始拥挤，标题、正文和行动按钮正在争抢同一块空间。';
+    else if (title > 80) liveAdvice.textContent = '标题具有很强的海报感，适合短句；正文内容较多时需要克制。';
+    else liveAdvice.textContent = '层级、留白和对比度处于较平衡的状态，重点容易被看见。';
+
+    if (save) localStorage.setItem('first-look-style', JSON.stringify({ title, spacing, contrast, radius, theme: liveTheme }));
+  }
+
+  function applyLivePreset(key, save = true) {
+    const preset = livePresets[key];
+    liveTitleSize.value = preset.title;
+    liveSpacing.value = preset.spacing;
+    liveContrast.value = preset.contrast;
+    liveRadius.value = preset.radius;
+    livePresetName.textContent = preset.name;
+    setLiveTheme(preset.theme);
+    $$('[data-style-preset]').forEach(button => button.classList.toggle('is-active', button.dataset.stylePreset === key));
+    updateLiveStyle(save);
+  }
+
+  liveInputs.forEach(input => input.addEventListener('input', () => {
+    livePresetName.textContent = '自定义样式';
+    $$('[data-style-preset]').forEach(button => button.classList.remove('is-active'));
+    updateLiveStyle(true);
+  }));
+  $$('[data-style-preset]').forEach(button => button.addEventListener('click', () => applyLivePreset(button.dataset.stylePreset)));
+  $$('[data-live-theme]').forEach(button => button.addEventListener('click', () => {
+    setLiveTheme(button.dataset.liveTheme);
+    livePresetName.textContent = '自定义样式';
+    $$('[data-style-preset]').forEach(item => item.classList.remove('is-active'));
+    updateLiveStyle(true);
+  }));
+  $('#resetStyle').addEventListener('click', () => applyLivePreset('balanced'));
+  $('#livePreviewAction').addEventListener('click', event => {
+    event.currentTarget.textContent = '已保存';
+    livePreviewStatus.textContent = '操作成功 · 可以随时取消';
+    setTimeout(() => {
+      event.currentTarget.textContent = '保存这条路线';
+      livePreviewStatus.textContent = '约 90 分钟 · 3.2 KM';
+    }, 2200);
+  });
 
   try {
-    const saved = JSON.parse(localStorage.getItem('first-look-audit') || '[]');
-    auditChecks.forEach(input => { input.checked = saved.includes(input.value); });
+    const savedStyle = JSON.parse(localStorage.getItem('first-look-style') || 'null');
+    if (savedStyle) {
+      liveTitleSize.value = savedStyle.title;
+      liveSpacing.value = savedStyle.spacing;
+      liveContrast.value = savedStyle.contrast;
+      liveRadius.value = savedStyle.radius;
+      setLiveTheme(savedStyle.theme || 'moss');
+      livePresetName.textContent = '上次调整';
+      $$('[data-style-preset]').forEach(button => button.classList.remove('is-active'));
+      updateLiveStyle(false);
+    } else applyLivePreset('balanced', false);
   } catch (_) {
-    localStorage.removeItem('first-look-audit');
+    localStorage.removeItem('first-look-style');
+    applyLivePreset('balanced', false);
   }
-  auditChecks.forEach(input => input.addEventListener('change', () => updateAudit(true)));
-  $('#resetAudit').addEventListener('click', () => {
-    auditChecks.forEach(input => { input.checked = false; });
-    updateAudit(true);
-  });
-  $('#printResult').addEventListener('click', () => print());
-  updateAudit(false);
 
   const captureTarget = new URLSearchParams(location.search).get('capture');
   if (captureTarget) {

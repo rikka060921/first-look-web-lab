@@ -21,7 +21,7 @@
     <nav class="site-nav" id="siteNav" aria-label="主要导航">
       <a href="#labs">互动实验</a>
       <a href="#case">前后对比</a>
-      <a href="#audit">网站体检</a>
+      <a href="#audit">现场调试</a>
     </nav>
   </header>
 
@@ -34,7 +34,7 @@
           <p class="hero-lead">审美不是装饰。它决定用户先看见什么、能否完成操作，以及愿不愿意继续留下。</p>
           <div class="hero-actions">
             <a class="button button-dark" href="#labs">开始第一个实验 <span>↓</span></a>
-            <a class="text-link" href="#audit">直接体检我的网站</a>
+            <a class="text-link" href="#audit">直接进入样式调试</a>
           </div>
         </div>
 
@@ -52,7 +52,7 @@
       <div class="hero-stats reveal">
         <div><strong>03</strong><span>秒注意力测试</span></div>
         <div><strong>06</strong><span>个互动实验</span></div>
-        <div><strong>01</strong><span>份网站体检结果</span></div>
+        <div><strong>01</strong><span>个实时样式调试台</span></div>
       </div>
     </section>
 
@@ -320,45 +320,84 @@
       </div>
     </section>
 
-    <section class="audit section-pad" id="audit" aria-labelledby="audit-title">
+    <section class="style-lab section-pad" id="audit" aria-labelledby="audit-title">
       <div class="section-heading reveal">
-        <p class="section-no">08 / 一分钟决策</p>
-        <h2 id="audit-title">先改哪一处，<br>这里直接告诉你。</h2>
-        <p>勾选已经做到的 8 项，未完成项会自动变成最多 3 条修改任务，帮你停止凭感觉反复调整。</p>
+        <p class="section-no">08 / 现场改一遍</p>
+        <h2 id="audit-title">拖一下，网站<br>就在眼前改变。</h2>
+        <p>不用记住抽象规则。调整标题、留白、对比度、圆角和配色，在同一个页面里直接比较变化。</p>
       </div>
 
-      <div class="audit-benefits reveal" aria-label="检查结果包含的内容">
-        <div><b>01</b><span><strong>发现卡点</strong><small>看清用户会在哪里困惑</small></span></div>
-        <div><b>02</b><span><strong>排定顺序</strong><small>只保留最值得先改的三项</small></span></div>
-        <div><b>03</b><span><strong>留下清单</strong><small>保存进度，也可以直接打印</small></span></div>
-      </div>
-
-      <div class="audit-grid reveal">
-        <form class="audit-list" id="auditForm">
-          <label><input type="checkbox" value="audience"><span><b>对象明确</b><small>能说清这个网站具体为谁服务</small></span></label>
-          <label><input type="checkbox" value="message"><span><b>核心表达</b><small>第一屏能理解网站想传达什么</small></span></label>
-          <label><input type="checkbox" value="contrast"><span><b>对比清晰</b><small>正文、按钮和状态都容易辨认</small></span></label>
-          <label><input type="checkbox" value="spacing"><span><b>留白有效</b><small>每个元素都有存在与占位的理由</small></span></label>
-          <label><input type="checkbox" value="hierarchy"><span><b>层级明确</b><small>最重要的信息最先被看见</small></span></label>
-          <label><input type="checkbox" value="response"><span><b>操作有回应</b><small>点击、加载和完成都有及时反馈</small></span></label>
-          <label><input type="checkbox" value="control"><span><b>用户可控制</b><small>可以返回、跳过、退出和撤销</small></span></label>
-          <label><input type="checkbox" value="mobile"><span><b>移动端清楚</b><small>小屏幕上仍能理解重点和操作</small></span></label>
-        </form>
-
-        <aside class="audit-result" aria-live="polite">
-          <p>你的网站修改清单</p>
-          <div class="score-ring" id="scoreRing"><strong id="auditScore">0</strong><span>/ 100</span></div>
-          <h3 id="auditLevel">先从第一项开始</h3>
-          <p id="auditAdvice">右侧会根据未完成项，列出最先值得修改的三件事。</p>
-          <div class="audit-priority">
-            <p>现在先改什么</p>
-            <ol id="auditPriorityList"></ol>
+      <div class="style-workbench reveal">
+        <aside class="style-controls" aria-label="实时样式控制台">
+          <div class="style-control-head">
+            <div><span>STYLE CONTROLS</span><h3>先选一种感觉</h3></div>
+            <button class="text-button" id="resetStyle" type="button">恢复平衡值</button>
           </div>
-          <div class="audit-actions">
-            <button class="button button-dark" id="printResult" type="button">打印修改清单</button>
-            <button class="text-button" id="resetAudit" type="button">重新检查</button>
+
+          <div class="style-presets" role="group" aria-label="选择样式预设">
+            <button type="button" data-style-preset="compact">原始拥挤</button>
+            <button class="is-active" type="button" data-style-preset="balanced">平衡清晰</button>
+            <button type="button" data-style-preset="poster">海报强调</button>
+          </div>
+
+          <div class="live-control">
+            <label for="liveTitleSize"><span>标题大小</span><output id="liveTitleValue">68 PX</output></label>
+            <input id="liveTitleSize" type="range" min="38" max="88" value="68">
+            <small>改变第一眼的视觉重量</small>
+          </div>
+          <div class="live-control">
+            <label for="liveSpacing"><span>内容留白</span><output id="liveSpacingValue">52 PX</output></label>
+            <input id="liveSpacing" type="range" min="18" max="72" value="52">
+            <small>改变信息之间的呼吸感</small>
+          </div>
+          <div class="live-control">
+            <label for="liveContrast"><span>文字对比</span><output id="liveContrastValue">78%</output></label>
+            <input id="liveContrast" type="range" min="30" max="100" value="78">
+            <small>改变说明文字的可读程度</small>
+          </div>
+          <div class="live-control">
+            <label for="liveRadius"><span>界面圆角</span><output id="liveRadiusValue">18 PX</output></label>
+            <input id="liveRadius" type="range" min="0" max="38" value="18">
+            <small>改变页面的理性或柔和气质</small>
+          </div>
+
+          <div class="theme-control">
+            <span>页面配色</span>
+            <div role="group" aria-label="选择页面配色">
+              <button type="button" data-live-theme="paper"><i></i>纸张</button>
+              <button class="is-active" type="button" data-live-theme="moss"><i></i>苔绿</button>
+              <button type="button" data-live-theme="night"><i></i>夜色</button>
+            </div>
           </div>
         </aside>
+
+        <div class="live-stage">
+          <div class="live-stage-head">
+            <span><i></i> LIVE PREVIEW</span>
+            <p><b id="livePresetName">平衡清晰</b> · 所有调整立即生效</p>
+          </div>
+
+          <article class="live-preview" id="livePreview" data-theme="moss">
+            <header><b>WANDER / 04</b><nav><span>路线</span><span>故事</span><span>收藏</span></nav></header>
+            <div class="live-preview-main">
+              <div class="live-preview-copy">
+                <small>一次没有目的的城市散步</small>
+                <h3>把周末<br>还给自己。</h3>
+                <p>离开熟悉的路线，从旧街区走到河岸。我们整理了一条适合独处，也适合重新观察城市的步行计划。</p>
+                <div><button id="livePreviewAction" type="button">保存这条路线</button><span id="livePreviewStatus" aria-live="polite">约 90 分钟 · 3.2 KM</span></div>
+              </div>
+              <div class="live-preview-visual" aria-hidden="true"><span></span><i></i><b>04</b></div>
+            </div>
+          </article>
+
+          <div class="live-readout" aria-live="polite">
+            <div><span>标题</span><strong id="readoutTitle">68 PX</strong></div>
+            <div><span>留白</span><strong id="readoutSpacing">52 PX</strong></div>
+            <div><span>对比</span><strong id="readoutContrast">78%</strong></div>
+            <div><span>圆角</span><strong id="readoutRadius">18 PX</strong></div>
+            <p id="liveAdvice">层级、留白和对比度处于较平衡的状态，重点容易被看见。</p>
+          </div>
+        </div>
       </div>
     </section>
 
