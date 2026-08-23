@@ -50,7 +50,7 @@
   let swipeStartY = 0;
 
   function syncLabHeight() {
-    labViewport.style.height = `${labSlides[activeLab].offsetHeight}px`;
+    labViewport.style.height = `${Math.ceil(labSlides[activeLab].getBoundingClientRect().height)}px`;
   }
 
   function showLab(index, focus = false) {
@@ -95,7 +95,8 @@
     if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY)) showLab(activeLab + (deltaX < 0 ? 1 : -1));
   }, { passive: true });
   addEventListener('resize', syncLabHeight);
-  new ResizeObserver(syncLabHeight).observe(labSlides[0]);
+  const labResizeObserver = new ResizeObserver(() => requestAnimationFrame(syncLabHeight));
+  labSlides.forEach(slide => labResizeObserver.observe(slide));
   showLab(0);
 
   const attentionCover = $('#attentionCover');
@@ -257,6 +258,17 @@
   const auditLevel = $('#auditLevel');
   const auditAdvice = $('#auditAdvice');
   const scoreRing = $('#scoreRing');
+  const auditPriorityList = $('#auditPriorityList');
+  const auditTasks = {
+    audience: ['对象明确', '在第一屏补上一句话：这是为谁提供什么帮助。'],
+    message: ['核心表达', '删减第一屏的并列重点，只保留一个核心承诺。'],
+    hierarchy: ['层级明确', '把标题、说明和主要按钮拉开明显的大小与位置差异。'],
+    contrast: ['对比清晰', '提高正文和按钮对比度，并检查浅色文字是否真正可读。'],
+    spacing: ['留白有效', '合并重复信息，为标题、正文和操作留出稳定间距。'],
+    response: ['操作有回应', '为点击、加载、完成和失败补上即时状态反馈。'],
+    control: ['用户可控制', '为不可逆操作增加取消、返回或撤销入口。'],
+    mobile: ['移动端清楚', '用手机完成一次真实任务，修正溢出、遮挡和过小按钮。']
+  };
 
   function updateAudit(save = true) {
     const checked = auditChecks.filter(input => input.checked);
@@ -264,9 +276,25 @@
     auditScore.textContent = score;
     scoreRing.style.setProperty('--score', `${score * 3.6}deg`);
 
+    const missing = auditChecks.filter(input => !input.checked);
+    auditPriorityList.replaceChildren();
+    const priorityItems = missing.slice(0, 3);
+    if (priorityItems.length === 0) {
+      const item = document.createElement('li');
+      item.innerHTML = '<b>✓</b><div><strong>基础项全部通过</strong><span>下一步邀请一位首次访问者完成真实任务，验证你的判断。</span></div>';
+      auditPriorityList.append(item);
+    } else {
+      priorityItems.forEach((input, index) => {
+        const [title, task] = auditTasks[input.value];
+        const item = document.createElement('li');
+        item.innerHTML = `<b>${String(index + 1).padStart(2, '0')}</b><div><strong>${title}</strong><span>${task}</span></div>`;
+        auditPriorityList.append(item);
+      });
+    }
+
     if (score === 0) {
-      auditLevel.textContent = '等待体检';
-      auditAdvice.textContent = '先完成左侧检查，再决定最值得调整的一个问题。';
+      auditLevel.textContent = '先从第一项开始';
+      auditAdvice.textContent = '当前没有通过项。先完成右侧第一条任务，再回来重新检查。';
     } else if (score < 50) {
       auditLevel.textContent = '重点需要重建';
       auditAdvice.textContent = '先处理服务对象、核心表达和第一屏层级，不要急着增加动画。';

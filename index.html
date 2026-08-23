@@ -322,9 +322,15 @@
 
     <section class="audit section-pad" id="audit" aria-labelledby="audit-title">
       <div class="section-heading reveal">
-        <p class="section-no">08 / 带走一份结果</p>
-        <h2 id="audit-title">给你的网站<br>做一次体检。</h2>
-        <p>勾选已经做到的项目，系统会给出分数与下一步优先级。结果只保存在当前设备。</p>
+        <p class="section-no">08 / 一分钟决策</p>
+        <h2 id="audit-title">先改哪一处，<br>这里直接告诉你。</h2>
+        <p>勾选已经做到的 8 项，未完成项会自动变成最多 3 条修改任务，帮你停止凭感觉反复调整。</p>
+      </div>
+
+      <div class="audit-benefits reveal" aria-label="检查结果包含的内容">
+        <div><b>01</b><span><strong>发现卡点</strong><small>看清用户会在哪里困惑</small></span></div>
+        <div><b>02</b><span><strong>排定顺序</strong><small>只保留最值得先改的三项</small></span></div>
+        <div><b>03</b><span><strong>留下清单</strong><small>保存进度，也可以直接打印</small></span></div>
       </div>
 
       <div class="audit-grid reveal">
@@ -340,12 +346,16 @@
         </form>
 
         <aside class="audit-result" aria-live="polite">
-          <p>网站审美体检</p>
+          <p>你的网站修改清单</p>
           <div class="score-ring" id="scoreRing"><strong id="auditScore">0</strong><span>/ 100</span></div>
-          <h3 id="auditLevel">等待体检</h3>
-          <p id="auditAdvice">先完成左侧检查，再决定最值得调整的一个问题。</p>
+          <h3 id="auditLevel">先从第一项开始</h3>
+          <p id="auditAdvice">右侧会根据未完成项，列出最先值得修改的三件事。</p>
+          <div class="audit-priority">
+            <p>现在先改什么</p>
+            <ol id="auditPriorityList"></ol>
+          </div>
           <div class="audit-actions">
-            <button class="button button-dark" id="printResult" type="button">打印结果</button>
+            <button class="button button-dark" id="printResult" type="button">打印修改清单</button>
             <button class="text-button" id="resetAudit" type="button">重新检查</button>
           </div>
         </aside>
