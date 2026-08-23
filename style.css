@@ -119,10 +119,10 @@ button:focus-visible, a:focus-visible, input:focus-visible { outline: 3px solid 
 .test-shape { position: absolute; display: block; border-radius: 50%; }
 .shape-one { width: 300px; height: 300px; right: -70px; top: 30px; background: #ffd52e; }
 .shape-two { width: 170px; height: 170px; right: 23%; bottom: -60px; background: #88d7ff; }
-.attention-cover { position: absolute; inset: 0; display: none; place-items: center; align-content: center; background: var(--ink); color: var(--white); text-align: center; }
-.attention-cover.is-running { display: grid; }
-.attention-cover span { font-size: 110px; font-weight: 800; line-height: 1; }
-.attention-cover p { color: rgba(255,255,255,.6); font-size: 12px; }
+.attention-cover { position: absolute; z-index: 5; top: 16px; left: 50%; display: none; align-items: center; gap: 10px; padding: 8px 14px 8px 8px; border: 1px solid rgba(255,255,255,.18); border-radius: 999px; color: var(--white); background: rgba(17,19,15,.92); box-shadow: 0 10px 30px rgba(17,19,15,.2); pointer-events: none; transform: translateX(-50%); white-space: nowrap; }
+.attention-cover.is-running { display: flex; }
+.attention-cover span { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; color: var(--ink); background: var(--acid); font-size: 18px; font-weight: 800; line-height: 1; }
+.attention-cover p { margin: 0; color: rgba(255,255,255,.74); font-size: 10px; }
 .attention-stage.is-finished .test-page { filter: blur(18px); opacity: .18; }
 .attention-stage.is-finished::after { content: "画面已隐藏 · 凭第一印象作答"; position: absolute; inset: 0; display: grid; place-items: center; padding: 24px; color: var(--ink); font-size: 13px; font-weight: 800; letter-spacing: .08em; text-align: center; }
 .attention-controls { padding: 24px; border-top: 1px solid var(--line); background: var(--white); }
@@ -274,6 +274,7 @@ input[type="range"] { width: 100%; accent-color: var(--ink); }
   .style-lab .section-heading h2 { font-size: clamp(44px,12vw,54px); line-height: 1.06; }
   .manifesto-layout { margin-top: 40px; }.labs.section-pad { padding-left: 16px; padding-right: 16px; }.lab { padding: 0; }.lab-intro { grid-template-columns: 40px 1fr; gap: 14px; }
   .test-page { min-height: 430px; padding: 28px 24px; }.test-page h4 { margin-top: 60px; }.test-price { bottom: 5%; }.shape-one { width: 220px; height: 220px; }
+  .attention-cover { padding: 6px; }.attention-cover p { display: none; }
   .contrast-copy { font-size: 32px; }.range-control,.feedback-modes,.save-demo { padding: 28px 22px; }.spacing-panel,.hierarchy-panel,.control-panel { padding: 14px; }.spacing-sample.is-airy { padding: 38px 24px; }.hierarchy-sample { padding: 32px 24px; min-height: 500px; }.hierarchy-sample h4 { font-size: 46px; }
   .response-panel { min-height: auto; }.feedback-modes legend { padding-top: 0; }
   .demo-dialog { width: 86%; padding: 28px 22px; }.case-page { min-height: 610px; }.case-page header nav { display: none; }.case-page header button { display: block; border: 0; background: transparent; }.case-main { grid-template-columns: 1fr; min-height: 550px; padding: 38px 24px; align-content: start; }.case-copy h3 { font-size: 52px; }.case-object { position: absolute; width: 65%; right: -8%; bottom: 2%; }.case-page.is-before .case-object { width: 78%; top: 29%; }.case-page.is-before .case-price { bottom: 7%; }.case-findings { grid-template-columns: 1fr; }.case-findings div { border-right: 0; border-bottom: 1px solid rgba(255,255,255,.18); padding-left: 0!important; }
