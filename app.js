@@ -35,6 +35,69 @@
   }, { threshold: .12 });
   $$('.reveal').forEach(element => revealObserver.observe(element));
 
+  const labCarousel = $('#labCarousel');
+  const labViewport = $('#labViewport');
+  const labTrack = $('#labTrack');
+  const labSlides = $$('[data-lab-slide]');
+  const labTabs = $$('[data-lab-target]');
+  const labPrev = $('#labPrev');
+  const labNext = $('#labNext');
+  const labCurrent = $('#labCurrent');
+  const labName = $('#labName');
+  const labNames = ['三秒注意力', '对比度', '留白', '视觉层级', '响应反馈', '用户控制'];
+  let activeLab = 0;
+  let swipeStartX = 0;
+  let swipeStartY = 0;
+
+  function syncLabHeight() {
+    labViewport.style.height = `${labSlides[activeLab].offsetHeight}px`;
+  }
+
+  function showLab(index, focus = false) {
+    activeLab = Math.max(0, Math.min(labSlides.length - 1, index));
+    labTrack.style.transform = `translate3d(-${activeLab * 100}%,0,0)`;
+    labSlides.forEach((slide, slideIndex) => {
+      const isActive = slideIndex === activeLab;
+      slide.setAttribute('aria-hidden', String(!isActive));
+      slide.inert = !isActive;
+    });
+    labTabs.forEach((tab, tabIndex) => {
+      const isActive = tabIndex === activeLab;
+      tab.classList.toggle('is-active', isActive);
+      if (isActive) tab.setAttribute('aria-current', 'step');
+      else tab.removeAttribute('aria-current');
+    });
+    labPrev.disabled = activeLab === 0;
+    labNext.disabled = activeLab === labSlides.length - 1;
+    labCurrent.textContent = String(activeLab + 1).padStart(2, '0');
+    labName.textContent = labNames[activeLab];
+    requestAnimationFrame(syncLabHeight);
+    if (focus) labCarousel.focus({ preventScroll: true });
+  }
+
+  labPrev.addEventListener('click', () => showLab(activeLab - 1));
+  labNext.addEventListener('click', () => showLab(activeLab + 1));
+  labTabs.forEach(tab => tab.addEventListener('click', () => showLab(Number(tab.dataset.labTarget))));
+  labCarousel.addEventListener('keydown', event => {
+    if (event.key === 'ArrowLeft') { event.preventDefault(); showLab(activeLab - 1); }
+    if (event.key === 'ArrowRight') { event.preventDefault(); showLab(activeLab + 1); }
+  });
+  labViewport.addEventListener('touchstart', event => {
+    if (event.target.closest('button,input,label')) return;
+    swipeStartX = event.changedTouches[0].clientX;
+    swipeStartY = event.changedTouches[0].clientY;
+  }, { passive: true });
+  labViewport.addEventListener('touchend', event => {
+    if (!swipeStartX) return;
+    const deltaX = event.changedTouches[0].clientX - swipeStartX;
+    const deltaY = event.changedTouches[0].clientY - swipeStartY;
+    swipeStartX = 0;
+    if (Math.abs(deltaX) > 48 && Math.abs(deltaX) > Math.abs(deltaY)) showLab(activeLab + (deltaX < 0 ? 1 : -1));
+  }, { passive: true });
+  addEventListener('resize', syncLabHeight);
+  new ResizeObserver(syncLabHeight).observe(labSlides[0]);
+  showLab(0);
+
   const attentionCover = $('#attentionCover');
   const attentionStage = $('#attentionStage');
   const attentionCount = $('#attentionCount');

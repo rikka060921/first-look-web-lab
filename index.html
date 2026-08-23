@@ -75,10 +75,13 @@
       <div class="section-heading reveal">
         <p class="section-no">01—06 / 互动实验</p>
         <h2 id="labs-title">不要相信结论，<br>亲手改变它。</h2>
-        <p>六个实验都使用同一原则：内容不变，只改变信息呈现方式。</p>
+        <p>六个实验左右切换。内容不变，只改变信息呈现方式。</p>
       </div>
 
-      <article class="lab lab-attention reveal" id="attentionLab">
+      <div class="lab-carousel reveal" id="labCarousel" role="region" aria-roledescription="轮播" aria-label="六个网站审美实验" tabindex="0">
+        <div class="lab-viewport" id="labViewport">
+          <div class="lab-track" id="labTrack">
+      <article class="lab lab-attention" id="attentionLab" data-lab-slide aria-hidden="false">
         <div class="lab-intro">
           <span class="lab-index">01</span>
           <div>
@@ -120,7 +123,7 @@
         </div>
       </article>
 
-      <article class="lab reveal">
+      <article class="lab" data-lab-slide aria-hidden="true">
         <div class="lab-intro">
           <span class="lab-index">02</span>
           <div>
@@ -143,7 +146,7 @@
         </div>
       </article>
 
-      <article class="lab reveal">
+      <article class="lab" data-lab-slide aria-hidden="true">
         <div class="lab-intro">
           <span class="lab-index">03</span>
           <div>
@@ -168,7 +171,7 @@
         </div>
       </article>
 
-      <article class="lab reveal">
+      <article class="lab" data-lab-slide aria-hidden="true">
         <div class="lab-intro">
           <span class="lab-index">04</span>
           <div>
@@ -194,7 +197,7 @@
         </div>
       </article>
 
-      <article class="lab reveal">
+      <article class="lab" data-lab-slide aria-hidden="true">
         <div class="lab-intro">
           <span class="lab-index">05</span>
           <div>
@@ -226,7 +229,7 @@
         </div>
       </article>
 
-      <article class="lab reveal">
+      <article class="lab" data-lab-slide aria-hidden="true">
         <div class="lab-intro">
           <span class="lab-index">06</span>
           <div>
@@ -261,6 +264,23 @@
           </div>
         </div>
       </article>
+          </div>
+        </div>
+        <div class="lab-carousel-controls">
+          <button class="lab-arrow" id="labPrev" type="button" aria-label="上一个实验"><span aria-hidden="true">←</span></button>
+          <div class="lab-pagination" role="group" aria-label="选择实验">
+            <button class="is-active" type="button" data-lab-target="0" aria-label="实验 1：三秒注意力"><b>01</b><span>注意力</span></button>
+            <button type="button" data-lab-target="1" aria-label="实验 2：对比度"><b>02</b><span>对比度</span></button>
+            <button type="button" data-lab-target="2" aria-label="实验 3：留白"><b>03</b><span>留白</span></button>
+            <button type="button" data-lab-target="3" aria-label="实验 4：视觉层级"><b>04</b><span>层级</span></button>
+            <button type="button" data-lab-target="4" aria-label="实验 5：响应反馈"><b>05</b><span>反馈</span></button>
+            <button type="button" data-lab-target="5" aria-label="实验 6：用户控制"><b>06</b><span>控制</span></button>
+          </div>
+          <p class="lab-position"><strong id="labCurrent">01</strong><span>/ 06</span><small id="labName">三秒注意力</small></p>
+          <button class="lab-arrow" id="labNext" type="button" aria-label="下一个实验"><span aria-hidden="true">→</span></button>
+        </div>
+        <p class="swipe-hint">点击箭头或章节编号切换，手机可左右滑动</p>
+      </div>
     </section>
 
     <section class="case-study section-pad" id="case" aria-labelledby="case-title">
